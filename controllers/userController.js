@@ -8,6 +8,23 @@ export function createUser(req,res){
 
   const newUserData = req.body
 
+  if(newUserData.type == "admin"){
+
+    if(req.user==null){
+      res.json({
+        message: "Please login as administrator to create admin accounts"
+      })
+      return
+    }   
+    
+    if(req.user.type != "admin"){
+      res.json({
+        message: "Please login as administrator to create admin accounts"
+      })
+      return
+    }
+  }
+
   newUserData.password = bcrypt.hashSync(newUserData.password, 10)  
 
   const user = new User(newUserData)
@@ -65,3 +82,30 @@ export function loginUser(req,res){
     }
   )
 }
+
+export function isAdmin(req){
+  if(req.user){
+      return false
+  }
+
+  if(req.user.type != "admin"){
+    return false
+  }
+  return true
+}
+
+export function isCustomer(req){
+  if(req.user){
+    return false
+}
+
+  if(req.user.type != "admin"){
+    return false
+}
+    return true     
+}
+
+//imantha@example.com - securePassword123 - admin
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImltYW50aGFAZXhhbXBsZS5jb20iLCJmaXJzdE5hbWUiOiJKb2huIiwibGFzdE5hbWUiOiJEb2UiLCJpc0Jsb2NrZWQiOmZhbHNlLCJ0eXBlIjoiYWRtaW4iLCJwcm9maWxlUGljdHVyZSI6Imh0dHBzOi8vaW1nLmZyZWVwaWsuY29tL2ZyZWUtdmVjdG9yL3VzZXItYmx1ZS1ncmFkaWVudF83ODM3MC00NjkyLmpwZyIsImlhdCI6MTczNTc4OTQwOH0.B6_yueN7HJVnBhOP2VrIaSTDuNdNucF8jXfCs_sq9ag
+//imantha2@example.com - securePassword123 - customer
+//token - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImltYW50aGEyQGV4YW1wbGUuY29tIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiaXNCbG9ja2VkIjpmYWxzZSwidHlwZSI6ImN1c3RvbWVyIiwicHJvZmlsZVBpY3R1cmUiOiJodHRwczovL2ltZy5mcmVlcGlrLmNvbS9mcmVlLXZlY3Rvci91c2VyLWJsdWUtZ3JhZGllbnRfNzgzNzAtNDY5Mi5qcGciLCJpYXQiOjE3MzU3ODUxODh9.AdzsAgahEyYySy5O71cp1bj5ZSLbXFPwBoNJvwWInbU
