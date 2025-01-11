@@ -12,7 +12,7 @@ const productSchema = mongoose.Schema({
     },
     altNames : [
         {
-            typec : String
+            type : String
         }
     ],
     images : [
