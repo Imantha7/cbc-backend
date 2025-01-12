@@ -8,4 +8,4 @@ productRouter.get("/",getProducts)
 productRouter.delete("/:productId",deleteProduct)
 productRouter.put("/:productId",updateProduct)
 
-export default productRouter; 
+export default productRouter;  
