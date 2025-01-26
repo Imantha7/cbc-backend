@@ -2,6 +2,7 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import axios from "axios";
 dotenv.config()
 
 export function createUser(req,res){
@@ -114,7 +115,32 @@ export function isCustomer(req){
   return true
 } 
 
+export async function googleLogin(req,res){
+  console.log(req.body);
+  const token = req.body.token
+
+  try{
+    const response =  await axios.get('https://www.googleapis.com/oauth2/v3/userinfo',{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    res.json({
+      message: "Google login successful",
+      user: response.data
+    })
+  }catch(e){
+    res.json({
+      message: "Google login failed"
+    }) 
+  }
+  
+}
+
 //imantha@example.com - securePassword123 - admin
 //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImltYW50aGFAZXhhbXBsZS5jb20iLCJmaXJzdE5hbWUiOiJKb2huIiwibGFzdE5hbWUiOiJEb2UiLCJpc0Jsb2NrZWQiOmZhbHNlLCJ0eXBlIjoiYWRtaW4iLCJwcm9maWxlUGljdHVyZSI6Imh0dHBzOi8vaW1nLmZyZWVwaWsuY29tL2ZyZWUtdmVjdG9yL3VzZXItYmx1ZS1ncmFkaWVudF83ODM3MC00NjkyLmpwZyIsImlhdCI6MTczNTc4OTQwOH0.B6_yueN7HJVnBhOP2VrIaSTDuNdNucF8jXfCs_sq9ag
 //imantha2@example.com - securePassword123 - customer
 //token - eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImltYW50aGEyQGV4YW1wbGUuY29tIiwiZmlyc3ROYW1lIjoiSm9obiIsImxhc3ROYW1lIjoiRG9lIiwiaXNCbG9ja2VkIjpmYWxzZSwidHlwZSI6ImN1c3RvbWVyIiwicHJvZmlsZVBpY3R1cmUiOiJodHRwczovL2ltZy5mcmVlcGlrLmNvbS9mcmVlLXZlY3Rvci91c2VyLWJsdWUtZ3JhZGllbnRfNzgzNzAtNDY5Mi5qcGciLCJpYXQiOjE3MzU3ODUxODh9.AdzsAgahEyYySy5O71cp1bj5ZSLbXFPwBoNJvwWInbU
+
+//'https://www.googleapis.com/oauth2/v3/userinfo'
+
