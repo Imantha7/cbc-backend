@@ -178,8 +178,16 @@ export async function googleLogin(req,res){
       message: "Google login failed"
     })
   }
+}
 
-
+export async function getUser(req,res){
+  if(req.user==null){
+    res.status(404).json({
+      message: "Please login to view user details"
+    })
+    return
+  }
+  res.json(req.user)
 }
 
 //imantha@example.com - securePassword123 - admin
